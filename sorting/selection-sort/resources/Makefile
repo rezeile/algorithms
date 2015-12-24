@@ -1,4 +1,6 @@
-all: enum-c enum-cc compare
+all: enum-c enum-cc compare compare2
+compare2: compare2.cc
+	g++ -o compare2 compare2.cc
 compare: compare.cc
 	g++ -o compare compare.cc
 enum-c: enum.c

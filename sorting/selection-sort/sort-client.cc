@@ -7,29 +7,28 @@
  * Last Updated: Dec 23 11:26 (PST)
  */
  #include <iostream>
-
- enum Algorithm {
-   SelectionSort,
-   InsertionSort,
-   ShellSort,
-   MergeSort
- };
-
- enum Ordering {
-   Random,
-   Sequential
- };
+ #include <vector>
+ #include "selection.hh"
+ 
+ static void printVector(std::vector<int> elems) {
+  std::cout << "[";
+  for(int i = 0; i < elems.size(); i++) {
+    if(i != elems.size() - 1) std::cout << elems[i] << ",";
+    else std::cout << elems[i];
+  }
+  std::cout << "]" << std::endl;
+ }
 
  int main(int argc, char *argv[]) {
- 	int kDefaultAlgorithm = -1; /* all */
-  int kDefaultArrayLength = 1024;
-  int kDefaultFrequency = 3; /* three doublings 1024 2048 2096 */
-  int kDefualtOrdering = 0; /* random */
-  if (argc != 9) {
-    std::cerr << "[usage]: ";
-    std::cerr << "./sort-client -a algorithm -n array-length ";
-    std::cerr << "-f doubling-frequency -o ordering" << std::endl;
-    exit(0);
-  }
+   std::vector<int> v;
+   for(int i = 10; i >= 1; i--) {
+     v.push_back(i);
+   }
+   std::cout << "Before SelectionSort" << std::endl;
+   printVector(v);
+   std::cout << "After SelectionSort" << std::endl;
+   SelectionSort(v);
+   printVector(v);
+   return 0;
  }
 

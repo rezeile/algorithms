@@ -44,8 +44,42 @@
 #include <vector> 
 #include <functional> /* for what? */
 
+/* 
+ * templetized implementation of the selection sort algorithm, 
+ * which sorts an array of elements according to an ordering
+ * directed by the user-specified comp function.
+ */
+template<typename T, typename Comparator>
+void SelectionSort(std::vector<T> &elems, Comparator comp) {
+ 	/* find 'best fit' index according to the comp function */
+ 	for(int i = 0; i < elems.size(); i++) {
+ 		T best = i;
+ 		for(int j = i + 1; j < elems.size(); j++) {
+ 			if(comp(elems[j],elems[best])) {
+ 				best = j;
+ 			}
+ 		}
+ 		/* swap if necessary */
+ 		if(best != i) {
+ 			T temp = elems[i];
+ 			elems[i] = elems[best];
+ 			elems[best] = temp;
+ 		}
+ 	}
+}
+
+/*
+ * Uses the above implementation to invoke the default version of a 
+ * call to SelectionSort (i.e. without the user specifying a comparator
+ * function.)
+ */
 template<typename T>
-void SelectionSort(std::vector<T> &elems, )
+void SelectionSort(std::vector<T> &elems) {
+	/* idea for wrapper around the above function using std::less<T>() obtained
+	 * from Keith Schwarz's merge-sort implementation which be found at
+	 * http://www.keithschwarz.com/interesting/code/?dir=mergesort */
+	SelectionSort(elems,std::less<T>());
+}
 
 
 #endif
