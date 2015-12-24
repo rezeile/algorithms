@@ -1,0 +1,9 @@
+all: selection-int-test sort-client
+selection-int-test: selection-int.hh selection-int-test.cc
+	g++ -o selection-int-test selection-int-test.cc
+sort-client: sort-client.cc
+	g++ -o sort-client sort-client.cc
+clean:
+	rm selection-int-test
+rm:
+	rm *~ .*~

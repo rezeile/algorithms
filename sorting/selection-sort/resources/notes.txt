@@ -1,0 +1,79 @@
+1. Using enums
+
+   We define enums in the same way that we define structs:
+
+   enum family {
+   	  Benjamin,
+   	  Eliezer,
+   	  Miseker,
+   	  Amarech,
+   	  Eshetu
+   }; /* note the semi-colon after the definition */
+
+   Thus we have effectively defined a new type (like int, float, char, bool, etc ...), 
+   where the elements of the type are the words (not std::strings) defined in between
+   lines 6 and 10, inclusive. Just like an unsigned char accepts values from 0 to 255, 
+   a variable of type 'family' excepts types of Benjamin through Eshetu, inclusive.
+
+   Thus the following is legal:
+
+   family member = Eliezer; /* Eliezer is of type family */
+   family member2 = Joshua; /* Illegal! Joshua is not of the user-defined type family */
+
+   We can also include the new type within other aggregate types such as structs: Consider
+   the following definition:
+
+   struct School {
+   	  int grade;
+   	  family member;
+   }; /* note the similarily of the semi-colon ending */
+
+   Thus a client would be able to use School in the following manner:
+
+   School s;
+   s.grade = 4;
+   s.member = Benjamin;
+
+   One last thing worth noting is that the members of an enum type are naturally indexed
+   by the order they appear in their definition. Thus for example, Benjamin has index
+   0, Eliezer 1, Miseker 2, and so forth. Thus the following test would hold true:
+
+   if(Eliezer == 1) /* do something */
+
+   Note, furthermore that enumerations need not be named, so this definition is as 
+   valid as the one given above:
+
+   enum {
+   	 zero,
+   	 one,
+   	 two,
+   	 three
+   }
+
+   We can use the identifiers 'zero' through 'three' anywhere in our see code and 
+   they would correspond to those index ranges as well.
+
+ 2. Difference between using enums and structs in c and c++
+
+    In C, once an enum is defined (as shown above), when it is used by a client,
+    the type requires the qualifier enum. That is simply having the following
+    will not work:
+
+    family member; /* gives an error */
+
+    Thus the full tag (enum is required) to make the statement valid:
+
+    enum family member; /* thus, in c, we could think of the type as enum family */
+
+    The same goes with structs;
+
+    School s; /* gives an error */
+
+    struct School s; /* valid */
+
+    But note that in C++ simply using the user-defined name as the type does not give 
+    an error. In fact both usages, the C and C++, are valid in C++;
+
+ 3. Using typedef
+
+
