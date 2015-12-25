@@ -8,8 +8,10 @@
  */
  #include <iostream>
  #include <vector>
+ #include <ctime>
+ #include <cstdlib>
  #include "insertion.hh"
-
+ 
  static void printVector(std::vector<int> elems) {
   std::cout << "[";
   for(int i = 0; i < elems.size(); i++) {
@@ -20,15 +22,19 @@
  }
 
  int main(int argc, char *argv[]) {
-   std::vector<int> v;
-   for(int i = 10; i >= 1; i--) {
-     v.push_back(i);
+   int arr[3] = {1000,10000,100000};
+   for(int j = 0; j < 3; j++) {
+      std::vector<int> v;
+      for(int i = 0; i < arr[j]; i++) {
+        v.push_back(rand() % arr[j] + 1);
+      }
+      std::cout << "Element count: " << arr[j] << std::endl;
+      std::clock_t start;
+      start = std::clock();
+      InsertionSort(v);
+      double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+      std::cout << "Duration: " << duration << " seconds." << std::endl;
    }
-   std::cout << "Before InsertionSort" << std::endl;
-   printVector(v);
-   std::cout << "After InsertionSort" << std::endl;
-   InsertionSort(v);
-   printVector(v);
    return 0;
  }
 
