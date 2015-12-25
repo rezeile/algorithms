@@ -42,7 +42,8 @@
 #define _SELECTION_H
 
 #include <vector> 
-#include <functional> /* for what? */
+#include <functional> /* std::less<T> */
+#include "../sort-util.hh" /* for swap */
 
 /* 
  * templetized implementation of the selection sort algorithm, 
@@ -60,11 +61,8 @@ void SelectionSort(std::vector<T> &elems, Comparator comp) {
  			}
  		}
  		/* swap if necessary */
- 		if(best != i) {
- 			T temp = elems[i];
- 			elems[i] = elems[best];
- 			elems[best] = temp;
- 		}
+ 		if(best != i) 
+ 			swap(elems,i,best);
  	}
 }
 
