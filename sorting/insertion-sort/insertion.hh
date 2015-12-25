@@ -67,8 +67,13 @@
  template<typename T, typename Comparator>
  void InsertionSort(std::vector<T> &elems, Comparator comp) {
  	for(int i = 0; i < elems.size() - 1; i++) {
- 		for(int j = i + 1; j > 0 && comp(elems[j], elems[j - 1]); j--) 
+    /* since we need at least two elements to 
+     * swap we must start at j = i + 1 */ 
+ 		for(int j = i + 1; j > 0; j--) 
+      if(comp(elems[j], elems[j - 1]))
  				swap(elems,j - 1,j);
+      else 
+        break;
  	}
  }
 
