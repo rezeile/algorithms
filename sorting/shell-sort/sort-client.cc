@@ -12,17 +12,8 @@
  #include <cstdlib>
  #include "shell.hh"
  
- static void printVector(std::vector<int> elems) {
-  std::cout << "[";
-  for(int i = 0; i < elems.size(); i++) {
-    if(i != elems.size() - 1) std::cout << elems[i] << ",";
-    else std::cout << elems[i];
-  }
-  std::cout << "]" << std::endl;
- }
-
  int main(int argc, char *argv[]) {
-   int arr[3] = {1000,10000,100000};
+   int arr[3] = {1000,10000,1000000};
    for(int j = 0; j < 3; j++) {
       std::vector<int> v;
       for(int i = 0; i < arr[j]; i++) {
