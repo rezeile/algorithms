@@ -1,0 +1,32 @@
+1. Converting char * to string 
+   
+  char *c = "hello";
+  std::string s(c);
+
+2. Why does returning an std::vector local variable not cause the variable to 'die'?
+
+   Consider the following two code fragments.
+
+   Example I.
+
+   int *foo() {
+      int arr[5];
+      return arr;
+   }
+
+   Example II
+
+   std::vector<int> bar() {
+      std::vector<int> v;
+      for(int i = 0; i < 5; i++)
+         v.push_back(i);
+      return v;
+   }
+
+   In the first scenario, the compiler gives a warning that we are returning a pointer to a local variable since arr actually decays to &arr[0], an element which goes out of scope after the 
+   the function foo returns. 
+
+   In the second example, when bar() returns, if it is going to be assigned to an lvalue then because
+   std::vector implements a copy assignment "=" the assignment operator, "=", ensures that the elements
+   are internally copied over to the new object and then proceeds to release the resources associated 
+   with the initial vector.

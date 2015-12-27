@@ -22,6 +22,16 @@
   * http://www.keithschwarz.com/interesting/code/?dir=mergesort
   */
   namespace detail {
+  	/* 
+  	 * Utility function that copies current elements into auxillary array 
+  	 */
+  	 template<typename T>
+  	 void copy(std::vector<T> elems, std::vector<T> &aux, int lo, int high) {
+  	 	for(int i = lo; i <= high; i++) {
+  	 		aux[i] = elems[i];
+  	 	}
+  	 }
+
   	/*
   	 * Abstraction of an in-place merge that expects a left half of vector elems and
   	 * a right half of vector elems to be in sorted order, and this merge routine 
@@ -29,8 +39,9 @@
   	 * size (high - lo). 
   	 */
     template<typename T, typename Comparator>
-  	void merge(std::vector<T> &elems, int lo, int mid, int high, std::vector<T> aux, Comparator comp) {
+  	void merge(std::vector<T> &elems, int lo, int mid, int high, std::vector<T> &aux, Comparator comp) {
   	  /* assume an auxillary array exists and is populated with elements lo through high */
+  	  copy(elems,aux,lo,high);
   	  int m = lo; /* begining index of left sub-array */
   	  int n = mid + 1; /* begining index of right sub-array */
   	  for(int i = lo; i <= high; i++) {
@@ -53,16 +64,6 @@
   	  }	
   	}
 
-  	/* 
-  	 * Utility function that copies current elements into auxillary array 
-  	 */
-  	 template<typename T>
-  	 void copy(std::vector<T> elems, std::vector<T> &aux, int lo, int high) {
-  	 	for(int i = lo; i <= high; i++) {
-  	 		aux[i] = elems[i];
-  	 	}
-  	 }
-
   	/*
   	 * sort routine which handles the overall algorithm. This algorithm will be internally 
   	 * utilized by the MergeSort routine which we export to our clients.
@@ -70,7 +71,7 @@
   	 template<typename T, typename Comparator>
   	 void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
   	   /* return if we reach a single element */
-  	   if(lo > high) return;
+  	   //if(lo > high) return;
   	   if((lo == mid) && (mid == high)) return;
   	   /* configure left sub-array indices */
   	   int l_lo = lo;
@@ -84,7 +85,6 @@
   	   std::vector<T> aux(elems.size());
   	   sort(elems,l_lo,l_mid,l_high,comp);
   	   sort(elems,r_lo,r_mid,r_high,comp);
-  	   copy(elems,aux,lo,high);
   	   merge(elems,lo,mid,high,aux,comp);
   	 }
   }
@@ -95,7 +95,7 @@
   * and merge routines defined within the detail namespace. 
   */
   template<typename T, typename Comparator>
-  void MergeSort(std::vector<T> &elems, Comparator comp) {
+  void MergeSortAIP(std::vector<T> &elems, Comparator comp) {
     detail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp);
   }
 
@@ -105,7 +105,7 @@
   * function.
   */
   template<typename T>
-  void MergeSort(std::vector<T> &elems) {
-    MergeSort(elems, std::less<T>());
+  void MergeSortAIP(std::vector<T> &elems) {
+    MergeSortAIP(elems, std::less<T>());
   }
 
