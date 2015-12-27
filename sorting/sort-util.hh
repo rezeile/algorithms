@@ -1,5 +1,8 @@
+ #ifndef _SORT_UTIL_HH
+ #define _SORT_UTIL_HH
+
  #include <vector>
- 
+ #include <iostream> /* for std::cout */
  /*
   * A utility function to print out a vector of elements.
   */
@@ -24,3 +27,5 @@
  	elems[i] = elems[j];
  	elems[j] = temp;
  }
+
+ #endif

@@ -1,0 +1,4 @@
+1. Converting char * to string 
+   
+  char *c = "hello";
+  std::string s(c);

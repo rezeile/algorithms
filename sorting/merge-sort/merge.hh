@@ -68,7 +68,7 @@
   	 * utilized by the MergeSort routine which we export to our clients.
   	 */
   	 template<typename T, typename Comparator>
-  	 void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp, std::vector<T> &aux) {
+  	 void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
   	   /* return if we reach a single element */
   	   if(lo > high) return;
   	   if((lo == mid) && (mid == high)) return;
@@ -81,9 +81,10 @@
   	   int r_high = high;
   	   int r_mid = (r_lo + r_high) / 2;
   	   /* sort sub-arrays */
-  	   sort(elems,l_lo,l_mid,l_high,comp,aux);
-  	   sort(elems,r_lo,r_mid,r_high,comp,aux);
-  	   //copy(elems,aux,lo,high);
+  	   std::vector<T> aux(elems.size());
+  	   sort(elems,l_lo,l_mid,l_high,comp);
+  	   sort(elems,r_lo,r_mid,r_high,comp);
+  	   copy(elems,aux,lo,high);
   	   merge(elems,lo,mid,high,aux,comp);
   	 }
   }
@@ -95,8 +96,7 @@
   */
   template<typename T, typename Comparator>
   void MergeSort(std::vector<T> &elems, Comparator comp) {
-    std::vector<T> aux(elems.size());
-    detail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp,aux);
+    detail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp);
   }
 
  /*
