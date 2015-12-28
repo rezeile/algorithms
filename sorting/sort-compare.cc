@@ -2,26 +2,29 @@
  * A program that compares various sorting algorithms 
  */
 
- #include <ctime>                       /* for std::clock_t and std::clock() */
- #include <cstdlib>						/* for rand() */
+ #include <ctime>                                        /* for std::clock_t and std::clock() */
+ #include <cstdlib>						                           /* for rand() */
  #include <vector>
- #include <string>                      /* for std::string and std::stoi(...) */
- #include "merge-sort/merge.hh"         /* for MergeSort */
- #include "insertion-sort/insertion.hh" /* for InsertionSort */
- #include "selection-sort/selection.hh" /* for SelectionSort */
- #include "shell-sort/shell.hh"         /* for ShellSort */
- #include <iostream> 					/* for std::cout */
+ #include <string>                                       /* for std::string and std::stoi(...) */
+ #include "merge-sort/merge-abstract-inplace.hh"         /* for MergeSortAIP */
+ #include "merge-sort/merge-aux.hh"                      /* for MergeSortAUX */
+ #include "insertion-sort/insertion.hh"                  /* for InsertionSort */
+ #include "selection-sort/selection.hh"                  /* for SelectionSort */
+ #include "shell-sort/shell.hh"                          /* for ShellSort */
+ #include "quick-sort/quick.hh"                          /* for QuickSort */
+ #include <iostream> 					                           /* for std::cout */
 
  /* 
   * global string array of functions 
   */
- std::string funcs[4] = {"Selection","Insertion","Shell","Merge"};
+ std::string funcs[6] = {"Selection","Insertion","Shell","MergeAIP", "MergeAUX","Quick"};
  
  /* 
   * utitlity function that executes the passed function
   * and then gets its time.
   */
  double getDuration(std::string s, int n) {
+  std::cout << "Algorithm: " << s << std::endl;
  	/* generate random int array of size n */
  	std::vector<int> v;
  	for(int i = 0; i < n; i++) {
@@ -33,19 +36,33 @@
  		start = std::clock();
  		SelectionSort(v);
  		duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
  	} else if (s.compare(funcs[1]) == 0) {
  		start = std::clock();
  		InsertionSort(v);
  		duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
  	} else if (s.compare(funcs[2]) == 0) {
  		start = std::clock();
  		ShellSort(v);
  		duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
  	} else if (s.compare(funcs[3]) == 0) {
  		start = std::clock();
- 		MergeSort(v);
+ 		MergeSortAIP(v);
  		duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
- 	}
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+ 	} else if (s.compare(funcs[4]) == 0) {
+    start = std::clock();
+    MergeSortAUX(v);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+  } else if (s.compare(funcs[5]) == 0) {
+    start = std::clock();
+    QuickSort(v);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+  }
  	return duration;
  }
  
@@ -60,8 +77,6 @@
     int n = std::stoi(num);
     double time1 = getDuration(s1, n);
     double time2 = getDuration(s2, n);
-    std::cout << "Time for " << s1 << " is: " << time1 << " seconds." << std::endl;
-    std::cout << "Time for " << s2 << " is: " << time2 << " seconds." << std::endl;
     std::cout << "For " << n << " integers " << s1 << " is: " << std::endl;
     std::cout << time2/time1 << " faster than " << s2 << std::endl;
  	return 0;

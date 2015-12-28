@@ -10,7 +10,7 @@
  #include <vector>
  #include <ctime>
  #include <cstdlib>
- #include "shell.hh"
+ #include "quick.hh"
  #include "../sort-util.hh"
  
  int main(int argc, char *argv[]) {
@@ -23,10 +23,12 @@
       std::cout << "Element count: " << arr[j] << std::endl;
       std::clock_t start;
       start = std::clock();
+      std::cout << "Before sorting: " << std::endl;
       printVector(v);
-      ShellSort(v);
+      QuickSort(v);
       double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
       std::cout << "Duration: " << duration << " seconds." << std::endl;
+      std::cout << "After sorting: " << std::endl;
       printVector(v);
    }
    return 0;

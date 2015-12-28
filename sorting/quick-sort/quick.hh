@@ -115,3 +115,74 @@
  * Last Edit: Dec 27 2015 16:47 PST
  *
  */
+ 
+ #include <vector>
+ #include <functional> /* for std::less() */
+ #include <iostream>
+
+ /* 
+  * We will implement the partion routine in a separate namespace. 
+  */
+ namespace detail {
+ 	/*
+ 	 * Simple utility function that swaps the two elements at 
+ 	 * indices i and j.
+ 	 */
+ 	template<typename T>
+ 	void exchange(std::vector<T> &elems, int i, int j) {
+ 		if(i == j) return; /* pre-emptively stop if the indices are the same */
+ 		T temp = elems[i];
+ 		elems[i] = elems[j];
+ 		elems[j] = temp;
+ 	}
+
+ 	/* 
+ 	 * The partition algorithm specified above in the introduction.
+ 	 */
+ 	template<typename T, typename Comparator>
+ 	int partition(std::vector<T> &elems, Comparator comp, int p, int r) {
+ 		/* initially start with empty partitions */
+ 		int pivot = elems[r];
+ 		int i = p - 1;
+ 		for(int j = p; j <= (r - 1); j++) {
+ 			if(comp(elems[j], pivot)) {
+ 				/* place in smaller partition */
+ 				i++;
+ 				exchange(elems,j,i);
+ 			} /* implicitly placed in a larger partition */
+ 		}
+ 		/* at this point we do one final exchange with pivot and index i + 1 */
+ 		exchange(elems,i + 1,r);
+ 		return i + 1;
+ 	}
+
+ 	/*
+ 	 * The sorting routine that relies on the partition defined above.
+ 	 */
+ 	 template<typename T, typename Comparator>
+ 	 void sort(std::vector<T> &elems, Comparator comp,int p, int r) {
+ 	 	/* we don't want p, our starting search index being equal to our pivot, r or greater */
+ 	 	if(p >= r) return; 
+ 	 	int new_pivot = partition(elems, comp,p,r);
+ 	 	sort(elems,comp,p,new_pivot - 1);
+ 	 	sort(elems,comp,new_pivot+1,r);
+ 	 }
+ }
+
+ /* 
+  * This is the actual quick-sort routine that we export to our clients 
+  */
+ template<typename T, typename Comparator>
+ void QuickSort(std::vector<T> &elems, Comparator comp) {
+ 	detail::sort(elems,comp,0,elems.size() - 1);
+ }
+
+ /*
+  * Overloaded function that uses the above definition to allow users
+  * to use quicksort without providing a comparator function. By default
+  * we use the less than operator.
+  */
+  template<typename T>
+  void QuickSort(std::vector<T> &elems) {
+  	QuickSort(elems,std::less<T>());
+  }

@@ -31,7 +31,7 @@
  								 * so we choose 3*h % 3 = 1 */
  	while(h >= 1) {
  		for(int i = h; i < N; i++) {
- 			for(int j = i + 1; j > 0 && comp(elems[j], elems[j - h]); j -= h) 
+ 			for(int j = i; j > 0 && comp(elems[j], elems[j - h]); j -= h) 
  				swap(elems,j - h,j);
  		}
  		h = h / 3;
