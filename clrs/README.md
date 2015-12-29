@@ -1,6 +1,7 @@
 ## Completed CLRS Chapter Problems
 
-### Chapter 3 (Growth of Functions)
+I. Chapter 3 (Growth of Functionos)
 - [3.1] Asymptotic Notation
-### Chapter 2 (Getting Started)
+
+II. Chapter 2 (Getting Started)
 - [2.3] Designing Algorithms
