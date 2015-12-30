@@ -1,7 +1,7 @@
 ## Implementation of classic algorithms in C++
 
 Author: Eliezer Abate
-Last Edit: Dec 28 19:50 PST
+Last Edit: Dec 30 14:23 PST
 
 #### Brief Description
 
@@ -25,6 +25,7 @@ or more client files that provide a basic test case for the algorithm.
 - shell sort
 - top down merge sort (abstract in place, auxillary)
 - quick sort
+- heap sort
 
 #### TODO
 
@@ -32,7 +33,6 @@ or more client files that provide a basic test case for the algorithm.
 
 - bottom up merge sort
 - 3-way partioning quick sort
-- heap sort
 
 ##### Symbol Tables
 
