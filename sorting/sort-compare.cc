@@ -12,12 +12,13 @@
  #include "selection-sort/selection.hh"                  /* for SelectionSort */
  #include "shell-sort/shell.hh"                          /* for ShellSort */
  #include "quick-sort/quick.hh"                          /* for QuickSort */
+ #include "heap-sort/heap.hh"                            /* for HeapSort */
  #include <iostream> 					                           /* for std::cout */
 
  /* 
   * global string array of functions 
   */
- std::string funcs[6] = {"Selection","Insertion","Shell","MergeAIP", "MergeAUX","Quick"};
+ std::string funcs[7] = {"Selection","Insertion","Shell","MergeAIP", "MergeAUX","Quick","Heap"};
  
  /* 
   * utitlity function that executes the passed function
@@ -60,6 +61,11 @@
   } else if (s.compare(funcs[5]) == 0) {
     start = std::clock();
     QuickSort(v);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+  } else if (s.compare(funcs[6]) == 0) {
+    start = std::clock();
+    HeapSort(v);
     duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
   }
