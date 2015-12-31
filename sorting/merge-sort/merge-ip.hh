@@ -1,16 +1,16 @@
 /*
- * Implementation of a top-down (recursive) merge sort algorithm for sortin an 
- * array of templetized items. The idea for an abstract in-place merge, one in 
- * which we appear to sort and merge the arrays in place (rather than using an 
- * auxilary array) was taken from Robert Sedgewick and Kevin Wayne's Introduction 
- * to Algorithms, Third Edition (Chapter 2.3 Merge Sort). 
- *
+ * Implementation of a top-down (recursive) merge sort algorithm for sorting an 
+ * array of templetized items. This implementation uses an in-place merge routine
+ * that I devised, but takes O(n^2) time.
  * 
  *
  * Author: Eliezer Abate
  * Last Edited: Dec 26 2015 13:44 PST
  */
  
+ #ifndef _MERGE_IP_HH
+ #define _MERGE_IP_HH
+
  #include <vector> /* for std::vector */
  #include <functional> /* for std::less<T>() */
  
@@ -21,16 +21,20 @@
   * merge sort implementation which can be found on his website at:
   * http://www.keithschwarz.com/interesting/code/?dir=mergesort
   */
-  namespace detail {
+  namespace mergeIPDetail {
+  	/* forward declare sort */
+  	template<typename T, typename Comparator>
+  	void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp);
+
   	/* 
-  	 * Utility function that copies current elements into auxillary array 
-  	 */
-  	 template<typename T>
-  	 void copy(std::vector<T> elems, std::vector<T> &aux, int lo, int high) {
-  	 	for(int i = lo; i <= high; i++) {
-  	 		aux[i] = elems[i];
-  	 	}
-  	 }
+     * Utility function that exhanges two elements.
+     */
+     template<typename T>
+     void exchange(std::vector<T> &elems, int i, int j) {
+        T temp = elems[i];
+        elems[i] = elems[j];
+        elems[j] = temp;
+     }
 
   	/*
   	 * Abstraction of an in-place merge that expects a left half of vector elems and
@@ -39,29 +43,20 @@
   	 * size (high - lo). 
   	 */
     template<typename T, typename Comparator>
-  	void merge(std::vector<T> &elems, int lo, int mid, int high, std::vector<T> &aux, Comparator comp) {
-  	  /* assume an auxillary array exists and is populated with elements lo through high */
-  	  copy(elems,aux,lo,high);
-  	  int m = lo; /* begining index of left sub-array */
-  	  int n = mid + 1; /* begining index of right sub-array */
-  	  for(int i = lo; i <= high; i++) {
-  	  	/* check whether we have exhaused the left sub-array, [0, mid -1] */
-  	  	if(m > mid) {
-  	  		elems[i] = aux[n++];
-  	  	}
-  	  	/* check whether we have exhaused the right sub-array, [mid, high] */
-  	  	else if(n > high) {
-  	  		elems[i] = aux[m++];
-  	  	}
-  	  	/* perform our comparison function */
-  	  	else if(comp(aux[m],aux[n])) {
-  	  		elems[i] = aux[m++];
-  	  	}
-  	  	/* opposite return value from comp() */
-  	  	else {
-  	  		elems[i] = aux[n++];
-  	  	}
-  	  }	
+  	void merge(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
+  	    /* start of left sub-array */
+  		int i = lo;
+  		while(i <= mid) {
+  			if(elems[i] > elems[mid + 1]) {
+  				exchange(elems,i,mid + 1);
+  				/* merge sort right half just in case placed out of position */
+  				int l = mid + 1;
+  				int h = high;
+  				int m = (l + h) / 2;
+  				sort(elems,l,m,h,comp);
+  			}
+  			i++;
+  		}
   	}
 
   	/*
@@ -71,7 +66,6 @@
   	 template<typename T, typename Comparator>
   	 void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
   	   /* return if we reach a single element */
-  	   //if(lo > high) return;
   	   if((lo == mid) && (mid == high)) return;
   	   /* configure left sub-array indices */
   	   int l_lo = lo;
@@ -82,10 +76,9 @@
   	   int r_high = high;
   	   int r_mid = (r_lo + r_high) / 2;
   	   /* sort sub-arrays */
-  	   std::vector<T> aux(elems.size());
   	   sort(elems,l_lo,l_mid,l_high,comp);
   	   sort(elems,r_lo,r_mid,r_high,comp);
-  	   merge(elems,lo,mid,high,aux,comp);
+  	   merge(elems,lo,mid,high,comp);
   	 }
   }
 
@@ -95,8 +88,8 @@
   * and merge routines defined within the detail namespace. 
   */
   template<typename T, typename Comparator>
-  void MergeSortAIP(std::vector<T> &elems, Comparator comp) {
-    detail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp);
+  void MergeSortIP(std::vector<T> &elems, Comparator comp) {
+    mergeIPDetail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp);
   }
 
  /*
@@ -105,7 +98,9 @@
   * function.
   */
   template<typename T>
-  void MergeSortAIP(std::vector<T> &elems) {
-    MergeSortAIP(elems, std::less<T>());
+  void MergeSortIP(std::vector<T> &elems) {
+    MergeSortIP(elems, std::less<T>());
   }
+
+#endif
 

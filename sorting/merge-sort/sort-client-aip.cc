@@ -10,7 +10,7 @@
  #include <vector>
  #include <ctime>
  #include <cstdlib>
- #include "merge-abstract-inplace.hh"
+ #include "merge-aip.hh"
  #include "../sort-util.hh"
  
  int main(int argc, char *argv[]) {
