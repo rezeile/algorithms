@@ -6,19 +6,21 @@
  #include <cstdlib>						                           /* for rand() */
  #include <vector>
  #include <string>                                       /* for std::string and std::stoi(...) */
- #include "merge-sort/merge-abstract-inplace.hh"         /* for MergeSortAIP */
+ #include "merge-sort/merge-aip.hh"                      /* for MergeSortAIP */
+ #include "merge-sort/merge-ip.hh"                       /* for MergeSortIP */
  #include "merge-sort/merge-aux.hh"                      /* for MergeSortAUX */
  #include "insertion-sort/insertion.hh"                  /* for InsertionSort */
  #include "selection-sort/selection.hh"                  /* for SelectionSort */
  #include "shell-sort/shell.hh"                          /* for ShellSort */
  #include "quick-sort/quick.hh"                          /* for QuickSort */
  #include "heap-sort/heap.hh"                            /* for HeapSort */
+ #include "bubble-sort/bubble.hh"
  #include <iostream> 					                           /* for std::cout */
 
  /* 
   * global string array of functions 
   */
- std::string funcs[7] = {"Selection","Insertion","Shell","MergeAIP", "MergeAUX","Quick","Heap"};
+ std::string funcs[9] = {"Selection","Insertion","Shell","MergeAIP", "MergeAUX","Quick","Heap","MergeIP","Bubble"};
  
  /* 
   * utitlity function that executes the passed function
@@ -66,6 +68,16 @@
   } else if (s.compare(funcs[6]) == 0) {
     start = std::clock();
     HeapSort(v);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+  } else if (s.compare(funcs[7]) == 0) {
+    start = std::clock();
+    MergeSortIP(v);
+    duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
+  } else if (s.compare(funcs[8]) == 0) {
+    start = std::clock();
+    BubbleSort(v);
     duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
     std::cout << "Time for " << s << " is: " << duration << " seconds." << std::endl;
   }
