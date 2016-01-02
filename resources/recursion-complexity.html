@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head><title> Recursion and Complexity </title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" /> 
+<!-- xhtml,charset=utf-8,html --> 
+<meta name="src" content="L02.tex" /> 
+<meta name="date" content="2010-02-02 23:58:00" /> 
+<link rel="stylesheet" type="text/css" href="L02.css" /> 
+</head><body 
+>
+   <div class="maketitle">
+
+
+
+<h2 class="titleHead"> Recursion and Complexity </h2>
+<div class="author" > <span 
+class="cmr-12x-x-120">Michael P. Fourman </span></div>
+<br />
+<div class="date" ><span 
+class="cmr-12x-x-120">February 2, 2010</span></div>
+   </div>
+      <div class="quote">
+      <!--l. 6--><p class="noindent"><span 
+class="cmti-12">In theory, there is no difference between theory and practice</span>
+      <br class="newline" /><span 
+class="cmti-12">&#8212; but, in practice, there is.                                      </span>Anon.
+</p>
+      </div>
+   <h3 class="likesectionHead"><a 
+ id="x1-1000"></a>Introduction</h3>
+<!--l. 14--><p class="noindent">In Practical One, you will experiment with examples of SML functions &#8212; <span 
+class="cmtt-12">fac</span>,
+<span 
+class="cmtt-12">fib</span>, <span 
+class="cmtt-12">gcd </span>and <span 
+class="cmtt-12">power</span>. These are &#8220;obviously correct&#8221;; That is, the definitions of the
+functions are directly based on well-known mathematical relationships, and so we
+should have reasonable confidence in our programming efforts. The issue of
+correctness is of fundamental importance in software engineering, and will be
+addressed as the CS201 course progresses. However, in this note, we shall tend to
+take correctness for granted and worry instead about another important issue:
+<span 
+class="cmti-12">efficiency</span>.
+</p><!--l. 25--><p class="indent">   Given some problem to be solved, we need to devise an <span 
+class="cmti-12">algorithm</span>, that is, a
+sequence of computational steps that transforms an input (i.e., a representation of
+a problem) into an appropriate output (i.e., a representation of the solution).
+When looking at the efficiency of algorithms, we are concerned with their <span 
+class="cmti-12">resource</span>
+<span 
+class="cmti-12">requirements</span>. In general, the two important resource measurements are the size of
+
+computer, and the amount of computer time, required by an implementation of
+an algorithm. For many problems, there are straightforwardly-expressed
+algorithms whose resource demands are sufficiently enormous that we
+need to find more subtle algorithms needing less resources. There is no
+guarantee that such algorithms will exist: usually it can be shown that
+problems cannot be solved using any less than some minimal level of
+resource.
+</p><!--l. 39--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-2000"></a>Measuring resource requirements</h3>
+<!--l. 41--><p class="noindent">If we have devised an algorithm, it possible to implement it by writing a computer
+program<span class="footnote-mark"><a 
+href="L022.html#fn1x0"><sup class="textsuperscript">1</sup></a></span><a 
+ id="x1-2001f1"></a>
+and then to assess its efficiency by performing experiments. For example, for
+different inputs to the algorithm, we might measure the amount of memory
+space required, or the processor time required, to compute the outputs.
+Note that the latter measure is not usually the same as the actual time
+required, since the processor is likely to be doing other things as well as
+running the algorithm. You will have a little experience of experimentation
+in Practical One, where the <span 
+class="cmtt-12">time </span>function will be used to measure the
+processor time required to evaluate various functions on various arguments.
+In some cases, this will yield unexpected observations worthy of further
+explanation.
+</p><!--l. 55--><p class="indent">   The basic problems with an experimental approach to checking efficiency (and
+correctness, for that matter) are threefold. First, it is necessary to implement the
+algorithm: this may be time-consuming and error-prone. Second, details
+of the implementation may affect efficiency, and obscure the essential
+behaviour of the algorithm. Third, it is not normally possible to test the
+algorithm on all possible inputs, which may mean missing good or bad special
+cases.
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-3000"></a>Analysing resource requirements</h3>
+<!--l. 66--><p class="noindent">As an alternative to experimentation, we shall be studying the <span 
+class="cmti-12">analysis of</span>
+
+<span 
+class="cmti-12">algorithms </span>as one thread of the course, that is, studying methods for
+predicting the resources that an algorithm requires. Analysing even simple
+algorithms can be challenging, and may require the use of non-trivial
+mathematics. The immediate goal of analyses is to find simple means of
+expressing the important characteristics of algorithms&#8217; resource requirements,
+suppressing unnecessary details. Before embarking on an introduction
+to some of the technical tools required for analysis of algorithms, this
+note will review the algorithms from Practical One, to see what can be
+predicted about their resource requirements. To keep things simple, we
+shall restrict our attention to the computation time required, and not
+worry about memory space. In general, when writing down algorithms, we
+do not have to use a particular programming language, but can use an
+appropriate mix of notation and language that permits a rigorous description.
+For the algorithms here, SML descriptions are as good as any (and, of
+course, have the added advantage that they can be directly executed by a
+computer).
+</p><!--l. 86--><p class="indent">   As Practical 1 will reveal, the basic problem with an analytic approach to
+predicting the performance of an algorithm is that we usually analyse a simplified
+computational model, which may abstract away features that, in practice,
+dominate the performance.
+</p><!--l. 91--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-4000"></a>Analysis of factorial algorithm</h3>
+<!--l. 94--><p class="noindent">The factorial algorithm can be expressed using simple recursion:
+</p><!--l. 95--><p class="indent">
+      </p><dl class="list1"><dt class="list">
+      </dt><dd 
+class="list"><div class="verbatiminput">
+      <span 
+class="cmtt-12">fun</span><span 
+class="cmtt-12">&#x00A0;fact</span><span 
+class="cmtt-12">&#x00A0;0</span><span 
+class="cmtt-12">&#x00A0;=</span><span 
+class="cmtt-12">&#x00A0;1</span>
+      <span 
+class="cmtt-12">&#x00A0;</span><br /><span 
+class="cmtt-12">&#x00A0;</span><span 
+class="cmtt-12">&#x00A0;|</span><span 
+class="cmtt-12">&#x00A0;fact</span><span 
+class="cmtt-12">&#x00A0;n</span><span 
+class="cmtt-12">&#x00A0;=</span><span 
+class="cmtt-12">&#x00A0;n</span><span 
+class="cmtt-12">&#x00A0;*</span><span 
+class="cmtt-12">&#x00A0;fact</span><span 
+class="cmtt-12">&#x00A0;(n</span><span 
+class="cmtt-12">&#x00A0;-</span><span 
+class="cmtt-12">&#x00A0;1);</span>
+      </div></dd></dl>
+<!--l. 96--><p class="indent">   Looking at the computation that has to be done, we might identify three
+things that will consume time: integer multiplication, integer subtraction and
+recursive function calls. There are other possibilities but, if we try to take every
+little detail into account, we are unlikely to get any kind of simple analysis. Let us
+ignore the cost of making recursive calls, and suppose that the cost of a
+
+multiplication is <span 
+class="cmmi-12">M </span>and that that of a subtraction is <span 
+class="cmmi-12">S</span>. We can then
+define a function <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>), meaning &#8220;the time required by the algorithm
+to compute <span 
+class="cmmi-12">n</span>!&#8221;, in a very similar form to that of the actual algorithm:
+</p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L020x.png" alt="T (0 ) =   0
+T(n ) =   M  + S + T (n - 1) for n &#x003E; 0
+" class="math-display"  /></center>
+</div> From this,  <div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L021x.png" alt="T (n)  =  (M  +  S) + T(n - 1)
+
+       =  2 (M  +  S) + T(n - 2 )
+       =  ...
+
+       =  n (M  + S) + T (n -  n)
+       =  n (M  + S)
+" class="math-display"  /></center>
+</div> If we regard <span 
+class="cmmi-12">M </span>and <span 
+class="cmmi-12">S </span>as being constants, this expression indicates that the time
+to compute <span 
+class="cmmi-12">n</span>! is proportional to <span 
+class="cmmi-12">n </span>so, for example, computing (2<span 
+class="cmmi-12">n</span>)! will take
+twice as long as computing <span 
+class="cmmi-12">n</span>! does. The acid test of such an analysis is to check
+its predictions against observed reality. Times reported from the SML
+function call <span 
+class="cmtt-12">time fac [512,1024,2048,4096] </span>were 2, 11, 53 and 228
+&#8212; more than quadrupling as the value of <span 
+class="cmmi-12">n </span>is doubled. To explain this
+discrepancy, we must both check our idealised analysis for flaws and also
+
+consider whether the SML implementation might be introducing unexpected
+behaviour.
+<!--l. 120--><p class="indent">   In this case, one obvious problem is an over-simplistic view of the cost of
+performing arithmetic. Regarding the subtraction time <span 
+class="cmmi-12">S </span>as a constant is
+reasonable here, since <span 
+class="cmmi-12">n </span>is a &#8216;normal size&#8217; integer, i.e., fits into 16 or 32 bits, and
+so <span 
+class="cmtt-12">n-1 </span>can be computed in one processor step. However, this is not the situation
+for multiplication. Employing some knowledge of the problem to be solved, we
+discover that <span 
+class="cmmi-12">n</span>! grows very rapidly as <span 
+class="cmmi-12">n </span>increases: Stirling&#8217;s approximation for
+the factorial function reveals that <span 
+class="cmmi-12">n</span>! grows at roughly the same rate as
+<span 
+class="cmmi-12">n</span><sup><span 
+class="cmmi-8">n</span></sup>, so the number of bits needed to represent <span 
+class="cmmi-12">n</span>! (that is lg <span 
+class="cmmi-12">n</span>! where lg
+is the base-two logarithm function) grows at roughly the same rate as
+lg <span 
+class="cmmi-12">n</span><sup><span 
+class="cmmi-8">n</span></sup> = <span 
+class="cmmi-12">n</span> lg <span 
+class="cmmi-12">n</span>. Thus, it is not reasonable to charge a constant time for every
+multiplication: the number of bits used for the right-hand operand in
+<span class="obeylines-h"><span class="verb"><span 
+class="cmtt-12">n</span><span 
+class="cmtt-12">&#x00A0;*</span><span 
+class="cmtt-12">&#x00A0;fact</span><span 
+class="cmtt-12">&#x00A0;(n-1)</span></span></span> &#8212; roughly proportional to (<span 
+class="cmmi-12">n </span><span 
+class="cmsy-10x-x-120">- </span>1) lg(<span 
+class="cmmi-12">n </span><span 
+class="cmsy-10x-x-120">- </span>1) &#8212; will rapidly
+become larger than 16, 32 or whatever limit our processor has on normal
+integers.
+</p><!--l. 137--><p class="indent">   Had we implemented the algorithm in C, we could not have used multiplication in
+such a cavalier fashion, since integers are not allowed to be bigger than the size
+that the processor can handle easily. To further understand our SML experiment,
+we need to establish how much time such a long multiplication takes, in terms of
+individual processor steps. Our SML system employs a straightforward algorithm
+(similar to long multiplication as learnt at school, in fact). This means
+that the time to multiply a normal size integer by a <span 
+class="cmmi-12">b</span>-bit long integer
+is proportional to <span 
+class="cmmi-12">b</span>. Thus, a more accurate expression for <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) would
+be:
+</p>
+   <center class="math-display" >
+<img 
+src="L022x.png" alt="T (n) = (n - 1)lg(n - 1)M  + S + T (n - 1)  " class="math-display"  /></center>
+(where <span 
+class="cmmi-12">M </span>is still some constant).   Using appropriate solution techniques, we can
+establish that  <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) <span 
+class="cmsy-10x-x-120">&#x221D; </span><span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup> lg <span 
+class="cmmi-12">n   </span>For example, (2<span 
+class="cmmi-12">n</span>)! will take just over four
+times as long to compute as <span 
+class="cmmi-12">n</span>! does. This corresponds rather better to the
+experimental results. Normally, we should hope to be able to analyse algorithms
+without having to probe details of possible implementations, because we
+
+assume that they will use &#8216;reasonable&#8217; computational operations. Here,
+the SML system was being a little &#8216;unreasonable&#8217; perhaps, since it was
+suggesting to us that an expensive operation was available at a modest
+charge.
+<!--l. 160--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-5000"></a>Analysis of Fibonacci algorithms</h3>
+<!--l. 163--><p class="noindent">In the obvious Fibonacci algorithm, there are two conspicuous things that
+consume time: integer addition and recursive function calls. Letting <span 
+class="cmmi-12">A </span>be a
+constant representing the time required for a simple addition, we can write down
+a function <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) meaning &#8220;the time required by the algorithm to compute the <span 
+class="cmmi-12">n</span>-th
+Fibonacci number&#8221;: </p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L023x.png" alt=" T(0)  =   0
+ T(1)  =   0
+
+T (n)  =   A + T (n - 2) + T(n - 1)  for n &#x003E; 1
+" class="math-display"  /></center>
+</div>Using appropriate solution techniques, we discover (to our slight horror) that <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>)
+is roughly proportional to 2<sup><span 
+class="cmmi-8">n</span></sup>.
+<!--l. 176--><p class="indent">   This is a very fast rate of growth, and helps to explain why our SML
+implementations run very slowly, even for modest values of <span 
+class="cmmi-12">n</span>. The problem is the
+pair of recursive calls, which duplicate much work. A little thought leads to the
+alternative <span 
+class="cmtt-12">fastfib </span>algorithm that eliminates one of the recursions, and so
+has:
+
+</p>
+   <center class="math-display" >
+<img 
+src="L024x.png" alt="T(n) = A  + T(n - 1 )  " class="math-display"  /></center>
+which is of similar style to the earlier factorial time analysis. Thus, the time
+requirement is proportional to <span 
+class="cmmi-12">n </span>&#8212; a dramatic improvement. Again, as with the
+factorial algorithm, we might worry about whether the addition operations can be
+done simply. However, this is a lesser concern when just comparing the two
+different Fibonacci algorithms, since both perform similar kinds of addition
+operations.
+<!--l. 188--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-6000"></a>(Highlights of) analysis of greatest common divisor algorithm</h3>
+<!--l. 191--><p class="noindent">Letting <span 
+class="cmmi-12">D </span>be a constant representing the time required for a division (needed to
+perform the mod operation), we can write down a function <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">m,n</span>) meaning &#8220;the
+time required by the algorithm to compute the greatest common divisor of <span 
+class="cmmi-12">m </span>and
+<span 
+class="cmmi-12">n</span>&#8221;: </p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L025x.png" alt="T(m, 0)  =   0
+
+T(m, n)  =   D + T (n,m  mod  n)  for n &#x003E; 0
+" class="math-display"  /></center>
+</div>Here, the form of the recursion makes it rather harder to derive an expression for
+<span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">m,n</span>) in terms of <span 
+class="cmmi-12">m</span>, <span 
+class="cmmi-12">n </span>and <span 
+class="cmmi-12">D</span>. The essential question is: how long will the
+sequence of recursive calls be? It is rather hard to work this out, but it turns out
+that the following is true:
+
+   <center class="math-display" >
+<img 
+src="L026x.png" alt="if n &#x003C; Fk then there are &#x003C; k recursive calls  " class="math-display"  /></center>
+where <span 
+class="cmmi-12">F</span><sub><span 
+class="cmmi-8">k</span></sub> is the <span 
+class="cmmi-12">k</span>-th Fibonacci number. If we indulge in some study of Fibonacci
+numbers, and then do some algebraic manipulation, it is possible to eventually
+establish that, at worst, the time required to compute gcd(<span 
+class="cmmi-12">m,n</span>) is roughly
+proportional to lg <span 
+class="cmmi-12">n</span>. This backs up experimental observations that the algorithm
+is fast. [<span 
+class="cmbx-12">Health warning: </span>the full details of this analysis are far beyond the scope
+of the CS201 course.]
+<!--l. 213--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-7000"></a>(Exercise on) analysis of powering algorithms</h3>
+<!--l. 216--><p class="noindent">Write down &#8216;time required&#8217; functions for both the <span 
+class="cmtt-12">power </span>and <span 
+class="cmtt-12">fastpower</span>
+algorithms. You should be able to derive a non-recursive expression for the <span 
+class="cmtt-12">power</span>
+time function fairly easily. [Hint: similar to the one for factorial.] Can you derive a
+non-recursive expression for the <span 
+class="cmtt-12">fastpower </span>time function? (If not, await a lecture
+in the near future.) As with the factorial algorithm, we also have to think about
+the size of integers involved. When we do this, it turns out that there is not much
+difference between the performance of the two algorithms, as you may have
+discovered experimentally. With the SML implementation, there is a further twist:
+if the binary representations of intermediate values contain lots of zeroes (e.g.,
+when computing powers of two), long multiplication is faster; this helps the
+<span 
+class="cmtt-12">fastpower </span>algorithm.
+</p><!--l. 231--><p class="indent">   Thus far, we have analysed various algorithms in a fairly informal
+way, starting from first principles each time. In the remainder of this
+note, we draw on our earlier experience in order to establish some general
+concepts that are useful whenever algorithms are being analysed and
+compared.
+</p><!--l. 237--><p class="indent">   There are three main things to be introduced: standard simplifications to
+remove unnecessary detail from algorithms under consideration; some
+mathematical notation to express concisely the resource requirements of
+algorithms; and some algebraic techniques for manipulating formulae expressing
+resource requirements. We look briefly at the first two of these, and defer the
+algebraic techniques until later in the course.
+
+</p><!--l. 244--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-8000"></a>Simplifying input detail</h3>
+<!--l. 247--><p class="noindent">To quantify the resource requirements of an algorithm, we should really define a
+function that maps each possible input to a prediction of the algorithm&#8217;s resource
+requirement on that input. However, for all but the most trivial types of input,
+this is a daunting undertaking because of the number and variety of different
+inputs possible. Therefore, we normally distill the inputs to get a simpler
+characterisation: the <span 
+class="cmti-12">input size</span>. Usually, when viewed at a low enough level of
+abstraction, the size of a &#8216;reasonable&#8217; binary representation of the input is a good
+measure. This allows some comparison of the resource requirements of
+algorithms from widely different problem areas. However, within specific
+problem areas, it is often clearer to define input size at an appropriate higher
+level.
+</p><!--l. 260--><p class="indent">   The insertion of the word &#8220;reasonable&#8221; above is designed to avoid occasions
+where we appear to be solving large problems cheaply but where we are, in
+fact, solving small problems expensively, because the algorithm input is
+represented in a way far more complicated than necessary. As a rough guide
+to what is reasonable, we can be guided by a fundamental result from
+<span 
+class="cmti-12">information theory</span>: if a data type has <span 
+class="cmmi-12">k </span>different values, each of which is equally
+likely to occur as inputs, then <span 
+class="cmmi-12">n</span> lg <span 
+class="cmmi-12">k </span>bits are necessary and sufficient to
+represent a sequence of <span 
+class="cmmi-12">n </span>inputs. As an indication that this result is not
+unexpected, consider numbering the different values from 0 to <span 
+class="cmmi-12">k </span><span 
+class="cmsy-10x-x-120">- </span>1,
+and recall that lg <span 
+class="cmmi-12">k </span>bits are necessary and sufficient to represent these
+integers uniquely. (As an indication that the result is not trivial, observe
+that if some values occur more frequently than others we may transmit
+messages more efficiently by using a code with fewer bits for more frequent
+characters.)
+</p><!--l. 276--><p class="indent">   After defining the input size measure for an algorithm, we define a function
+that maps each input size to a predicted resource requirement &#8216;on that input size&#8217;.
+The trouble is that there is usually a range of requirements: some inputs of a
+given size may be very cheap to deal with, others may be very expensive.
+Normally, we determine the requirements of the worst possible input of each size
+in order to characterise the behaviour of an algorithm. Sometimes however, where
+it is clear that an algorithm is normally far better than a worst case analysis
+suggests, we determine the average requirement over all the inputs of a given size.
+The analysis of the quick sort algorithm later in the course will give an example of
+this.
+
+</p><!--l. 288--><p class="noindent">
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-9000"></a>Simplifying computational detail</h3>
+<!--l. 291--><p class="noindent">To predict the time required for the execution of an
+algorithm<span class="footnote-mark"><a 
+href="L023.html#fn2x0"><sup class="textsuperscript">2</sup></a></span><a 
+ id="x1-9001f2"></a>,
+we shall attempt to predict how many &#8216;elementary computational operations&#8217; are
+performed. The working definition of &#8220;elementary&#8221; will be that an operation
+requires some constant amount of time to carry out, that is, the time
+does not vary with the size of the operands. Everyday examples include
+adding two 64-bit real numbers, comparing two 32-bit integers, or moving a
+16-bit integer from one location to another. Outlawed examples include
+adding two arbitrary length integers, or searching an arbitrary-length list
+for an item of interest. To avoid our analyses becoming dependent on
+implementation details, we shall not exactly quantify the constant amounts of
+time required for elementary operations. This simplification still allows us to
+examine the basic behaviour of algorithms, and to compare alternative
+algorithms.
+</p><!--l. 309--><p class="indent">   As the informal analyses given earlier may have suggested, we shall make a
+further abstraction to simplify matters: only the <span 
+class="cmti-12">rate of growth </span>of the time
+requirement with respect to increasing input size is of interest. Therefore, instead
+of aiming to derive a fairly precise formula to express an algorithm&#8217;s time
+requirements, e.g., <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) = 10<span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup> <span 
+class="cmsy-10x-x-120">- </span>2<span 
+class="cmmi-12">n </span>+ 9 elementary operations where <span 
+class="cmmi-12">n </span>is the
+input size, we shall only aim to establish the dominant highest order term, here
+10<span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup>. Moreover, we shall ignore the constant coefficient, here 10, since
+constant factors are less significant than the rate of growth in determining
+efficiency for large input sizes. Given these simplifications, we can express
+formulae for resource requirements concisely using &#8216;big-O&#8217; notation. The
+formula
+</p>
+
+   <center class="math-display" >
+<img 
+src="L027x.png" alt="T (n) = O (f(n))  " class="math-display"  /></center>
+read &#8220;<span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) is of order <span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>)&#8221;, is defined to mean:
+      <div class="quote">
+      <!--l. 323--><p class="noindent">there are two constants, <span 
+class="cmbx-12">c</span> and <span 
+class="cmmi-12">n</span><sub><span 
+class="cmr-8">0</span></sub>, such that
+</p>
+      <center class="math-display" >
+      <img 
+src="L028x.png" alt="T (n ) &#x2264; cf(n) for all n &#x2265; n
+                          0
+      " class="math-display"  /></center>
+      <!--l. 323--><p class="nopar"></p></div>
+<!--l. 325--><p class="noindent">(we assume that none of <span 
+class="cmbx-12">c</span>, <span 
+class="cmmi-12">n</span><sub><span 
+class="cmr-8">0</span></sub>, <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) or <span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>) is ever negative). In the example
+above where <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) = 10<span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup> <span 
+class="cmsy-10x-x-120">- </span>2<span 
+class="cmmi-12">n </span>+ 9, we just write <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">O</span>(<span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup>). Here,
+<span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup>, and <span 
+class="cmbx-12">c </span>= 10 and <span 
+class="cmmi-12">n</span><sub>
+<span 
+class="cmr-8">0</span></sub> = 5 are suitable constants. Note that <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) does
+not <span 
+class="cmti-12">have </span>to grow as fast as <span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>); saying <span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">O</span>(<span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>)) merely asserts
+that <span 
+class="cmmi-12">T </span>doesn&#8217;t grow any faster than <span 
+class="cmmi-12">f</span>. Usually, the functions <span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>) that
+we see are of the form <span 
+class="cmmi-12">n</span><sup><span 
+class="cmmi-8">k</span></sup> (where <span 
+class="cmmi-12">k </span>is a constant), lg <span 
+class="cmmi-12">n </span>or 2<sup><span 
+class="cmmi-8">n</span></sup>, or some
+multiplicative combination of these, such as <span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup> lg <span 
+class="cmmi-12">n </span>or <span 
+class="cmmi-12">n</span>2<sup><span 
+class="cmmi-8">n</span></sup>. Note that lg <span 
+class="cmmi-12">n </span>grows
+more slowly than any function of the form <span 
+class="cmmi-12">n</span><sup><span 
+class="cmmi-8">k</span></sup>, for every <span 
+class="cmmi-12">k &#x003E; </span>0 &#8212;even
+when <span 
+class="cmmi-12">k &#x003C; </span>1, and 2<sup><span 
+class="cmmi-8">n</span></sup> grows more quickly than any function of the form <span 
+class="cmmi-12">n</span><sup><span 
+class="cmmi-8">k</span></sup>.
+One useful, and slightly abused, special case is <span 
+class="cmmi-12">f</span>(<span 
+class="cmmi-12">n</span>) = 1: the formula
+<span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">O</span>(1) is used as shorthand for &#8220;<span 
+class="cmmi-12">T</span>(<span 
+class="cmmi-12">n</span>) is bounded by some constant for all
+<span 
+class="cmmi-12">n</span>&#8221;.
+</p><!--l. 340--><p class="indent">   We usually consider that one algorithm is more efficient than another
+algorithm if its time requirement has a lower rate of growth. Note that may not be
+faster for some input sizes, but the algorithm will be faster for all large enough
+inputs. When comparing algorithms on the basis of big-O notation formulae, we
+must take care that the hidden <span 
+class="cmmi-12">n</span><sub><span 
+class="cmr-8">0</span></sub> thresholds and the hidden <span 
+class="cmbx-12">c </span>constant factors
+are not outrageously large. Remember that, for example, a <span 
+class="cmmi-12">O</span>(<span 
+class="cmmi-12">n</span>) time algorithm
+requiring 1000000<span 
+class="cmmi-12">n </span>operations is slower than an <span 
+class="cmmi-12">O</span>(<span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup>) one requiring <span 
+class="cmmi-12">n</span><sup><span 
+class="cmr-8">2</span></sup> operations
+unless <span 
+class="cmmi-12">n &#x003E; </span>1000000.
+</p>
+
+   <h4 class="likesubsectionHead"><a 
+ id="x1-10000"></a>Deriving formulae for time requirements</h4>
+<!--l. 351--><p class="noindent">The examples given earlier should indicate that it may be fairly straightforward to
+derive a recursive definition for the time requirement of a given algorithm. Solving
+such definitions to obtain an algebraic formula for the complexity is sometimes a
+taxing mathematical challenge. However, many examples are straightforward, and
+different algorithms may often be treated using similar methods. We will return to
+look at some of these techniques later in the course. For the moment, as an
+exercise, we derive <span 
+class="cmmi-12">O</span>-expressions for the rates of growth of the various recursively
+defined functions, counting nodes and leaves of trees, introduced in Lecture
+Note&#x00A0;1.
+</p><!--l. 362--><p class="noindent">
+</p>
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-11000"></a>Full Trees</h5>
+<!--l. 363--><p class="noindent">The number of leaves in a full binary tree of height <span 
+class="cmmi-12">n </span>is given by the equations:
+</p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L029x.png" alt="    B(0)  =   1
+B(n + 1)  =   B (n) + B(n )
+" class="math-display"  /></center>
+</div> We want to derive an algebraic expression for <span 
+class="cmmi-12">B</span>(<span 
+class="cmmi-12">n</span>). By induction on <span 
+class="cmmi-12">n</span>, we can
+show that <span 
+class="cmmi-12">B</span>(<span 
+class="cmmi-12">n</span>) = 2<sup><span 
+class="cmmi-8">n</span></sup>. The first equation gives the base case, <span 
+class="cmmi-12">n </span>= 0. Using the
+second equation and the induction hypothesis we can derive the induction step:
+<div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L0210x.png" alt="B(n + 1)  =   B (n) + B(n )
+          =   2 &#x00D7; B (n)
+                   n
+          =   2 &#x00D7; 2
+          =   2n+1
+" class="math-display"  /></center>
+</div> So, <span 
+class="cmmi-12">B</span>(<span 
+class="cmmi-12">n</span>) is exponential: <span 
+class="cmmi-12">B</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">O</span>(2<sup><span 
+class="cmmi-8">n</span></sup>).
+   <h5 class="likesubsubsectionHead"><a 
+ id="x1-12000"></a>Spines</h5>
+<!--l. 374--><p class="noindent">The equations for the number of leaves in a spine </p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L0211x.png" alt="    S(0)  =   1
+S(n + 1)  =   S(n ) + 1
+" class="math-display"  /></center>
+</div>have a clear solution: <span 
+class="cmmi-12">S</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">n </span>+ 1. So <span 
+class="cmmi-12">S</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmmi-12">O</span>(<span 
+class="cmmi-12">n</span>), a linear function &#8212; a formal
+proof would again use induction.
+   <h4 class="likesubsectionHead"><a 
+ id="x1-13000"></a>Balanced trees</h4>
+<!--l. 382--><p class="noindent">The number <span 
+class="cmmi-12">F</span>(<span 
+class="cmmi-12">n</span>) of leaves in a slightly unbalanced tree is given by the following
+equations:  </p><div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L0212x.png" alt="    F (0 ) =   1
+    F (1 ) =   2
+
+F(n + 2 ) =   F (n + 1) + F (n)
+" class="math-display"  /></center>
+</div> This is closely related to the Fibonacci numbers, <span 
+class="cmti-12">fib</span>(<span 
+class="cmmi-12">n</span>), defined by the equations
+<div class="eqnarray">
+   <center class="math-display" >
+<img 
+src="L0213x.png" alt="    fib(0)  =   0
+
+    fib(1)  =   1
+fib(n + 2)  =   fib(n + 1) + fib(n)
+" class="math-display"  /></center>
+</div>Indeed, <span 
+class="cmmi-12">F</span>(<span 
+class="cmmi-12">n</span>) = <span 
+class="cmti-12">fib</span>(<span 
+class="cmmi-12">n </span>+ 2) (since <span 
+class="cmti-12">fib</span>(2) = 1 and <span 
+class="cmti-12">fib</span>(3) = 2).
+<!--l. 394--><p class="indent">   The Fibonacci numbers are related to the <span 
+class="cmti-12">golden ratio</span>, <span 
+class="cmmi-12">&#x03C6; </span>= <img 
+src="L0214x.png" alt="  &#x221A;-
+1+25-"  class="frac" align="middle" />, and
+its conjugate, <img 
+src="L0215x.png" alt="&#x02C6;&#x03C6;"  class="circ"  /> = <img 
+src="L0216x.png" alt="  &#x221A;-
+1--5-
+  2"  class="frac" align="middle" />. These are defined as the roots of the quadratic
+equation <span 
+class="cmmi-12">&#x03C6;</span><sup><span 
+class="cmr-8">2</span></sup> = 1 + <span 
+class="cmmi-12">&#x03C6;</span>. Numerically, <span 
+class="cmmi-12">&#x03C6; </span>= 1<span 
+class="cmmi-12">.</span>61803<span 
+class="cmmi-12">&#x2026;</span>, and <img 
+src="L0217x.png" alt="&#x02C6;
+&#x03C6;"  class="circ"  /> = <span 
+class="cmsy-10x-x-120">-</span>0<span 
+class="cmmi-12">.</span>61803<span 
+class="cmmi-12">&#x2026;</span>.
+The <span 
+class="cmmi-12">i</span>th Fibonacci number <span 
+class="cmti-12">fib</span>(<span 
+class="cmmi-12">i</span>) is equal to <img 
+src="L0218x.png" alt=" i i
+&#x03C6;-&#x221A;-&#x02C6;&#x03C6;-
+  5"  class="frac" align="middle" /> (this may be proved by
+induction on <span 
+class="cmmi-12">i</span>). Since <span 
+class="cmsy-10x-x-120">|</span><img 
+src="L0219x.png" alt="&#x02C6;
+&#x03C6;"  class="circ"  /> <span 
+class="cmsy-10x-x-120">| </span>is less than 1, the term <img 
+src="L0220x.png" alt="&#x02C6;
+&#x03C6;"  class="circ"  /> <sup><span 
+class="cmmi-8">i</span></sup><span 
+class="cmmi-12">&#x2215;</span><img 
+src="L0221x.png" alt="&#x221A; --
+  5"  class="sqrt"  /> is small, and <span 
+class="cmmi-12">&#x03C6;</span><sup><span 
+class="cmmi-8">i</span></sup><span 
+class="cmmi-12">&#x2215;</span><img 
+src="L0222x.png" alt="&#x221A; --
+  5"  class="sqrt"  />
+is a good approximation to <span 
+class="cmti-12">fib</span>(<span 
+class="cmmi-12">i</span>) (rounded to the nearest integer, it is
+equal to <span 
+class="cmti-12">fib</span>(<span 
+class="cmmi-12">i</span>)). The upshot, for our present purposes, is that <span 
+class="cmmi-12">F</span>(<span 
+class="cmmi-12">n</span>) is also
+exponential.
+</p>
+<!--l. 405--><p class="noindent"><span class="paragraphHead"><a 
+ id="x1-14000"></a><span 
+class="cmbx-12">Lop-sided trees</span></span> The least number of leaves in a tree of height <span 
+class="cmmi-12">n</span>, imbalanced at
+any node by at most a <span 
+class="cmti-12">factor </span>of 2, is given by the recurrence </p><div class="eqnarray">
+
+   <center class="math-display" >
+<img 
+src="L0223x.png" alt="lop(0)  =  1
+
+lop (n)  =  lop(n - 1) + lop(&#x230A;n&#x2215;2&#x230B;)
+" class="math-display"  /></center>
+</div>Solution of this recurrence is beyond the scope of this course.  <span 
+class="cmr-10x-x-109">(C) Michael</span>
+<span 
+class="cmr-10x-x-109">Fourman 1994-2006</span>
+    
+</body></html> 
+
+
+

@@ -26,12 +26,14 @@ or more client files that provide a basic test case for the algorithm.
 - top down merge sort (abstract in place, auxillary)
 - quick sort
 - heap sort
+- in-place merge (w/ merge for right sub-array)
 
 #### TODO
 
 ##### Sorting 
 
 - bottom up merge sort
+- in-place merge
 - 3-way partioning quick sort
 
 ##### Symbol Tables

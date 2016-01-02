@@ -39,28 +39,29 @@
   	 * size (high - lo). 
   	 */
     template<typename T, typename Comparator>
-  	void merge(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
+  	void merge(std::vector<T> &elems,std::vector<T> &aux,int lo, int mid, int high, Comparator comp) {
   	  /* assume an auxillary array exists and is populated with elements lo through high */
-  	  std::vector<T> aux(elems.size());
-      copy(elems,aux,lo,high);
+  	  
+      /* according to sedgewick making aux local to merge would dominate the run time of 
+       * merge since elems.size() new elements are allocated on every call to merge. */
   	  int m = lo; /* begining index of left sub-array */
   	  int n = mid + 1; /* begining index of right sub-array */
   	  for(int i = lo; i <= high; i++) {
   	  	/* check whether we have exhaused the left sub-array, [0, mid -1] */
   	  	if(m > mid) {
-  	  		elems[i] = aux[n++];
+  	  		aux[i] = elems[n++];
   	  	}
   	  	/* check whether we have exhaused the right sub-array, [mid, high] */
   	  	else if(n > high) {
-  	  		elems[i] = aux[m++];
+  	  		aux[i] = elems[m++];
   	  	}
   	  	/* perform our comparison function */
   	  	else if(comp(aux[m],aux[n])) {
-  	  		elems[i] = aux[m++];
+  	  		aux[i] = elems[m++];
   	  	}
   	  	/* opposite return value from comp() */
   	  	else {
-  	  		elems[i] = aux[n++];
+  	  		aux[i] = elems[n++];
   	  	}
   	  }	
   	}
@@ -70,22 +71,14 @@
   	 * utilized by the MergeSort routine which we export to our clients.
   	 */
   	 template<typename T, typename Comparator>
-  	 void sort(std::vector<T> &elems, int lo, int mid, int high, Comparator comp) {
+  	 void sort(std::vector<T> &elems,std::vector<T> &aux, int lo,int high, Comparator comp) {
   	   /* return if we reach a single element */
-  	   //if(lo > high) return;
-  	   if((lo == mid) && (mid == high)) return;
-  	   /* configure left sub-array indices */
-  	   int l_lo = lo;
-  	   int l_high = mid;
-  	   int l_mid = (l_lo + l_high) / 2;
-  	   /* configure right sub-array indices */
-  	   int r_lo = mid + 1;
-  	   int r_high = high;
-  	   int r_mid = (r_lo + r_high) / 2;
+  	   if(lo >= high) return;
+  	   int mid = (lo + high) / 2;
   	   /* sort sub-arrays */
-  	   sort(elems,l_lo,l_mid,l_high,comp);
-  	   sort(elems,r_lo,r_mid,r_high,comp);
-  	   merge(elems,lo,mid,high,comp);
+  	   sort(aux,elems,lo,mid,comp);
+  	   sort(aux,elems,mid + 1,high,comp);
+  	   merge(elems,aux,lo,mid,high,comp);
   	 }
   }
 
@@ -96,7 +89,9 @@
   */
   template<typename T, typename Comparator>
   void MergeSortAIP(std::vector<T> &elems, Comparator comp) {
-    mergeDetail::sort(elems,0, (elems.size() - 1) / 2, elems.size() - 1, comp);
+    std::vector<T> aux(elems.size());
+    mergeDetail::copy(elems,aux,0,elems.size() - 1);
+    mergeDetail::sort(elems,aux,0,elems.size() - 1,comp);
   }
 
  /*
