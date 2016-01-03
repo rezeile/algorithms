@@ -60,9 +60,10 @@ void SelectionSort(std::vector<T> &elems, Comparator comp) {
  				best = j;
  			}
  		}
- 		/* swap if necessary */
- 		if(best != i) 
- 			swap(elems,i,best);
+ 		/* note intstead of introducitng another compare with the following test: 
+ 		 * if(best != i), I will simply swap the elements regardless of what the 
+ 		 * min is. */
+ 		swap(elems,i,best);
  	}
 }
 

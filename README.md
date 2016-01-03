@@ -1,7 +1,7 @@
 ## Implementation of classic algorithms in C++
 
 Author: Eliezer Abate
-Last Edit: Dec 30 14:23 PST
+Last Edit: Jan 3 15:10 PST
 
 #### Brief Description
 
@@ -27,14 +27,14 @@ or more client files that provide a basic test case for the algorithm.
 - quick sort
 - heap sort
 - in-place merge (w/ merge for right sub-array)
+- bottom up merge sort
 
 #### TODO
 
 ##### Sorting 
 
-- bottom up merge sort
-- in-place merge
 - 3-way partioning quick sort
+- in-place merge
 
 ##### Symbol Tables
 

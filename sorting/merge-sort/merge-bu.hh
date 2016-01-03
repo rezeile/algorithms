@@ -8,7 +8,7 @@
  * 
  *
  * Author: Eliezer Abate
- * Last Edited: Dec 26 2015 13:44 PST
+ * Last Edited: Jan 3 2015 14:55 PST
  */
  
  #ifndef __MERGE_BU_HH
@@ -27,7 +27,7 @@
   * merge sort implementation which can be found on his website at:
   * http://www.keithschwarz.com/interesting/code/?dir=mergesort
   */
-  namespace mergeDetail {
+  namespace mergeBUDetail {
   	/* 
   	 * Utility function that copies current elements into auxillary array 
   	 */
@@ -47,14 +47,15 @@
   	void merge(std::vector<T> &elems,std::vector<T> &aux,int lo, int mid, int high, Comparator comp) {
       if(lo >= high) return; /* already merged */
       copy(elems,aux,lo,high);
-      std::cout << "In merge: " << "[" << lo << "," << mid << "," << high << "]" << std::endl;
-      printVector(elems);
       int i = lo;
       int j = mid + 1;
       for(int k = lo; k <= high; k++) {
         if(i > mid) elems[k] = aux[j++];
         else if(j > high) elems[k] = aux[i++];
-        else if(comp(elems[j],elems[i])) elems[k] = aux[j++];
+        /* need to make sure we use aux in the comparison stage, since elems
+         * gets modified in the intervening steps between index lo and high 
+         */
+        else if(comp(aux[j],aux[i])) elems[k] = aux[j++];
         else elems[k] = aux[i++];
       }
   	}
@@ -66,13 +67,10 @@
   	 void sort(std::vector<T> &elems,std::vector<T> &aux,Comparator comp) {
        for(int i = 1; i < elems.size(); i = i + i)
         for(int j = 0; j < elems.size() - i; j += i + i) {
-          std::cout << "j: " << j << std::endl;
           int inc = j + 2*i - 1;
           int max = elems.size() - 1;
           int hi = std::min(inc,max);
-          std::cout << "hi: " << hi << std::endl;
           merge(elems,aux,j,j + i - 1,hi,comp);
-          printVector(elems);
         }
   	 }
   }
@@ -85,7 +83,7 @@
   template<typename T, typename Comparator>
   void MergeSortBU(std::vector<T> &elems, Comparator comp) {
     std::vector<T> aux(elems.size());
-    mergeDetail::sort(elems,aux,comp);
+    mergeBUDetail::sort(elems,aux,comp);
   }
 
  /*
