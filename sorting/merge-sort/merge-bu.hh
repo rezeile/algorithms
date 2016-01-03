@@ -11,8 +11,14 @@
  * Last Edited: Dec 26 2015 13:44 PST
  */
  
+ #ifndef __MERGE_BU_HH
+ #define __MERGE_BU_HH
+
  #include <vector> /* for std::vector */
  #include <functional> /* for std::less<T>() */
+ #include <algorithm> /* for std::min */
+ #include <iostream>
+ #include "../sort-util.hh"
  
  /*
   * We will place the details of the merge and sort algorithms in the detail
@@ -41,7 +47,8 @@
   	void merge(std::vector<T> &elems,std::vector<T> &aux,int lo, int mid, int high, Comparator comp) {
       if(lo >= high) return; /* already merged */
       copy(elems,aux,lo,high);
-
+      std::cout << "In merge: " << "[" << lo << "," << mid << "," << high << "]" << std::endl;
+      printVector(elems);
       int i = lo;
       int j = mid + 1;
       for(int k = lo; k <= high; k++) {
@@ -53,18 +60,20 @@
   	}
 
   	/*
-  	 * sort routine which handles the overall algorithm. This algorithm will be internally 
-  	 * utilized by the MergeSort routine which we export to our clients.
+  	 * Bottom-Up Merge Sort
   	 */
   	 template<typename T, typename Comparator>
-  	 void sort(std::vector<T> &elems,std::vector<T> &aux, int lo,int high, Comparator comp) {
-  	   /* return if we reach a single element */
-  	   if(lo >= high) return;
-  	   int mid = (lo + high) / 2;
-  	   /* sort sub-arrays */
-  	   sort(aux,elems,lo,mid,comp);
-  	   sort(aux,elems,mid + 1,high,comp);
-  	   merge(elems,aux,lo,mid,high,comp);
+  	 void sort(std::vector<T> &elems,std::vector<T> &aux,Comparator comp) {
+       for(int i = 1; i < elems.size(); i = i + i)
+        for(int j = 0; j < elems.size() - i; j += i + i) {
+          std::cout << "j: " << j << std::endl;
+          int inc = j + 2*i - 1;
+          int max = elems.size() - 1;
+          int hi = std::min(inc,max);
+          std::cout << "hi: " << hi << std::endl;
+          merge(elems,aux,j,j + i - 1,hi,comp);
+          printVector(elems);
+        }
   	 }
   }
 
@@ -74,10 +83,9 @@
   * and merge routines defined within the detail namespace. 
   */
   template<typename T, typename Comparator>
-  void MergeSortAIP(std::vector<T> &elems, Comparator comp) {
+  void MergeSortBU(std::vector<T> &elems, Comparator comp) {
     std::vector<T> aux(elems.size());
-    mergeDetail::copy(elems,aux,0,elems.size() - 1);
-    mergeDetail::sort(elems,aux,0,elems.size() - 1,comp);
+    mergeDetail::sort(elems,aux,comp);
   }
 
  /*
@@ -86,7 +94,9 @@
   * function.
   */
   template<typename T>
-  void MergeSortAIP(std::vector<T> &elems) {
-    MergeSortAIP(elems, std::less<T>());
+  void MergeSortBU(std::vector<T> &elems) {
+    MergeSortBU(elems, std::less<T>());
   }
+
+#endif
 

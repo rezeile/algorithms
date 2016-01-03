@@ -10,7 +10,7 @@
  #include <vector>
  #include <ctime>
  #include <cstdlib>
- #include "merge-aip.hh"
+ #include "merge-bu.hh"
  #include "../sort-util.hh"
  
  int main(int argc, char *argv[]) {
@@ -25,7 +25,7 @@
       start = std::clock();
       std::cout << "Before sorting: " << std::endl;
       printVector(v);
-      MergeSortAIP(v);
+      MergeSortBU(v);
       double duration = (std::clock() - start) / (double) CLOCKS_PER_SEC;
       std::cout << "Duration: " << duration << " seconds." << std::endl;
       std::cout << "After sorting: " << std::endl;
