@@ -53,9 +53,10 @@
 template<typename T, typename Comparator>
 void SelectionSort(std::vector<T> &elems, Comparator comp) {
  	/* find 'best fit' index according to the comp function */
- 	for(int i = 0; i < elems.size(); i++) {
+ 	int N = elems.size();
+ 	for(int i = 0; i < N; i++) {
  		T best = i;
- 		for(int j = i + 1; j < elems.size(); j++) {
+ 		for(int j = i + 1; j < N; j++) {
  			if(comp(elems[j],elems[best])) {
  				best = j;
  			}
