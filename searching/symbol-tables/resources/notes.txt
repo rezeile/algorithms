@@ -1,0 +1,4 @@
+1. Note that a symbol-table is a data structure that is used in compilers
+   to keep track of all the symbols (identifiers) that occur within 
+   programs. These programs may be variable names, function names, and
+   names of classes.
