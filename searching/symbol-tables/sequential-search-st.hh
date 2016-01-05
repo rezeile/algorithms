@@ -31,6 +31,50 @@
  	Value v;
  	Node *next;
  };
+ 
+ /* forward declaration to allow use in STIterator */
+template<typename Key,typename Value>
+class SequentialSearchST;
+
+template<typename Key,typename Value>
+class STIterator {
+public:
+  /* constructor */
+  STIterator (Node<Key,Value> *head,int pos): _pos(pos), _head(head) {}
+  
+  /* define != operator for Bag */
+  bool operator != (STIterator<Key,Value> other) {
+  	 return _pos != other._pos;
+  }
+
+  bool operator == (STIterator<Key,Value> other) {
+  	 return _pos == other._pos;
+  }
+
+  /* overload ++ operator */
+  STIterator& operator++ () {
+    ++_pos;
+  	return *this; /* Is (*this) a BagIterator? Yes! */
+  }
+
+  /* overload the dereference * operator */
+  /* We need to iterate through the local pointer _cur instead of _head because
+   * on successive calls, the internal data member _head will not always point
+   * to the head of the linked list. Thus, we ought to be careful in preserving
+   * the original value and only traversing the elements with the pointer _cur 
+   */
+  Key operator* () {
+    Node<Key,Value> *_cur = _head;
+    for(int i = 0; i < _pos; i++) {
+      _cur = _cur->next;
+    }
+	return _cur->k;
+  }
+
+private:
+  int _pos; /* position */
+  Node<Key, Value> *_head;
+};
 
  template<typename Key, typename Value>
  class SequentialSearchST {
@@ -43,6 +87,12 @@
    	 bool contains(Key k);
    	 int size();
    	 bool empty();
+   	 STIterator<Key,Value> begin() {
+      return STIterator<Key,Value>(head,0);
+     }
+     STIterator<Key,Value> end() {
+      return STIterator<Key,Value>(head,count);
+     }
    private:
    	 Node<Key,Value> *head;
    	 int count;
