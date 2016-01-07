@@ -211,6 +211,7 @@ private:
  		if(cur->k == k) {
  			return true;
  		}
+ 		cur = cur->next;
  	}
  	return false;
  }

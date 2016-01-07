@@ -21,7 +21,7 @@
  #include <iostream>
 
  int main(int argc, char *argv[]) {
- 	int minlen = std::stoi(argv[2]);
+ 	int minlen = std::stoi(argv[1]);
  	SequentialSearchST<std::string,int> st;
  	std::string w;
  	while(std::cin >> w) {
@@ -31,12 +31,10 @@
  	}
 
  	/* find key with the highest frequency count, using iterators */
+ 	/* need to fix the iterator */
  	std::string max = "";
  	st.put(max,0);
  	for(std::string w : st)
- 		if(st.get(w) > st.get(max))
- 			max = w;
- 	std::cout << max << " " << st.get(max) << std::endl;
- 	//SequentialSearchST<std::string,int> st;
+ 		std::cout << w << std::endl;
  	return 0;
  }
