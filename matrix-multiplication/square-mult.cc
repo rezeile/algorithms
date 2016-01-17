@@ -37,10 +37,12 @@ int **squareMultiply(int **mA,int **mB,int n,int rowA, int colB) {
   /* square multiplication */
   for(int i = 0; i < rowA; i++) {
     for(int j = 0; j < colB; j++) {
+      int sum = 0;
       for(int k = 0; k < n; k++) {
-        res[i][j] = mA[rowA][k] * mB[k][colB];
+        sum += mA[rowA][k] * mB[k][colB];
       }
-  }
+      res[rowA][colB] = sum;
+    }
   }
   return res;
 }
