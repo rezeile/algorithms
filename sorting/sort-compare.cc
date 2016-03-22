@@ -94,7 +94,8 @@
  int main(int argc, char *argv[]) {
  	if(argc != 4) {
  		std::cout << "Too few arguments!" << std::endl;
- 		exit(0);
+ 	    std::cout << "You must enter the name of 2 sorting algorithms and a number N" << std::endl;	
+		exit(0);
  	}
     std::string s1(argv[1]);
     std::string s2(argv[2]);
