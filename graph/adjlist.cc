@@ -14,9 +14,19 @@
  *
  */
 
-#include <iostream>
+#include <iostream> /* for cout */
+#include <vector> 
+/*
+ * A Node in an adjacency list. 
+ */
+struct Node {
+	int value;
+	Node *next;
+};
 
 int main(int argc, char *argv[]) {
+	/* create base nodes */
+	std::vector<Node> v;
 	std::cout << "adjlist.cc" << std::endl;
 	return 0;
 }
