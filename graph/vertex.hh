@@ -70,6 +70,4 @@
 	 * Copy assignment operator (rule of three).
 	 */
 	Vertex& operator =(Vertex&& other);
-
-
  }
