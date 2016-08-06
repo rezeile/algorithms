@@ -9,6 +9,6 @@ and the files they correspond to in this directory
 
 ## Problems
 
-### Problem No. | Title | File
+[Problem No.] | [Title] | [File Name]
 
-ch.1.3.4 | balanced parenthesis | balanced.cc
+1. ch.1.3.4 | balanced parenthesis | balanced.cc
