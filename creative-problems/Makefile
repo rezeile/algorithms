@@ -1,4 +1,4 @@
-balanced-paren: balanced-paren.cc
-	g++ -o balanced-paren balanced-paren.cc
+balanced: balanced.cc
+	g++ -o balanced balanced.cc
 clean:
-	rm balanced-paren
+	rm balanced
