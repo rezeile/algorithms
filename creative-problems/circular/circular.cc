@@ -18,7 +18,7 @@
  #include <iostream>
  using namespace std;
 
-bool isCircularRotation(string &t, string &s);
+bool isCircularRotation(string t, string &s);
 
 int main(int argc, char *argv[]) {
     cout << "Enter a string s: ";
@@ -33,12 +33,25 @@ int main(int argc, char *argv[]) {
       } else {
         cout << "NO" << endl;
       }
-      cout << "Enter another string t (or press enter to end): ";
+      cout << "Enter another string t: ";
     }
     return 0;
  }
 
- bool isCircularRotation(string &t, string &s) {
+ /* 
+  * return true if t is a circular rotation of 
+  * s (and vice versa, ofcourse) 
+  */
+ bool isCircularRotation(string t, string &s) {
+  // ABC --> BCA --> CAB --> ABC (true)
+  // ABC --> BAC (no)
+  if(t.size() != s.size()) return false;
+  if(t == s) return true;
+  for(size_t i = 1; i <= t.size(); i++) {
+    string ts = t.substr(i,t.size()) + t.substr(0,i);
+    cout << ts << endl;
+    if(ts == s) return true;
+  }
   return false;
  }
 
