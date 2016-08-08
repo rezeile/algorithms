@@ -11,6 +11,7 @@ and the files they correspond to in this directory
 
 [Problem No.] | [Title] | [File Name]
 
-1. ch.1.2.6 | circular rotation    | circular/circular.cc
-2. ch.1.3.4 | balanced parenthesis | balanced/balanced.cc
+1. ch.1.1.9 | binary representation| binary/binary.cc
+2. ch.1.2.6 | circular rotation    | circular/circular.cc
+3. ch.1.3.4 | balanced parenthesis | balanced/balanced.cc
 
