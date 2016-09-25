@@ -25,14 +25,28 @@
 #include <sstream>
 using namespace std;
 
+void printNth(int N);
 int main(int argc, char *argv[]) {
 	cout << "Enter two values [M] [N]: ";
 	string s;
 	getline(cin,s);
+	vector<bool> kill_status;
 	int M, N;
 	ss >> M; // every Mth person is killed
 	ss >> N; // positions of people
+	
+	int start = M % 7;
+	for(int i = start; i < 7; i += (M % 7)) {
+		if (kill_status )
+	}
 
+}
 
+void printNth(int N) {
+	int start = N % 7;
+	for(int i = 0; i < 7; i++) {
+		
+	}
+}
 
 
