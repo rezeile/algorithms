@@ -42,8 +42,8 @@ or more client files that provide a basic test case for the algorithm.
 - binary search
 - binary tree search
 - red-black bst search
-- hasing with separate chaining
-- hasing with linear probing
+- hashing with separate chaining
+- hashing with linear probing
 
 ##### Graphs
 
