@@ -36,15 +36,6 @@ or more client files that provide a basic test case for the algorithm.
 - 3-way partioning quick sort
 - in-place merge
 
-##### Symbol Tables
-
-- sequential search 
-- binary search
-- binary tree search
-- red-black bst search
-- hashing with separate chaining
-- hashing with linear probing
-
 ##### Graphs
 
 - depth first search
