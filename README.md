@@ -16,23 +16,22 @@ and 'insertion-sort', among others. And withing these sub-directories, the
 algorithm is implemented in a C++ header file (.hh), and there is usually one
 or more client files that provide a basic test case for the algorithm.
 
-#### Finished Implementations
+A ~~strikethrough~~ on a description indicates that it has already been implemented. 
+Similarly a description missing a strikethrough is on my TODO list and will be 
+implemented at a later date.
+
+#### Implementations
 
 ##### Sorting
 
-- selection sort 
-- insertion sort [tutorial on eliezerabate.com as well]
-- shell sort
-- top down merge sort (abstract in place, auxillary)
-- quick sort
-- heap sort
-- in-place merge (w/ merge for right sub-array)
-- bottom up merge sort
-
-#### TODO
-
-##### Sorting 
-
+- ~~selection sort~~
+- ~~insertion sort~~
+- ~~shell sort~~
+- ~~top down merge sort (abstract in place, auxillary)~~
+- ~~quick sort~~
+- ~~heap sort~~
+- ~~in-place merge (w/ merge for right sub-array)~~
+- ~~bottom up merge sort~~
 - 3-way partioning quick sort
 - in-place merge
 
