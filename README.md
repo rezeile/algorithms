@@ -1,7 +1,7 @@
 ## Implementation of classic algorithms in C++
 
 Author: Eliezer Abate
-Last Edit: October 4 2016
+Last Edit: October 31 2017
 
 #### Brief Description
 
