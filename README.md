@@ -48,6 +48,7 @@ implemented at a later date.
 - shortest paths (Dijkstra)
 - shortest paths in DAGs
 - shortest paths (Bellman Ford)
+- articulation points/bridges
 
 ##### Strings
 
