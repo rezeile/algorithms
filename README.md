@@ -1,14 +1,11 @@
 ## Implementation of classic algorithms in C++
 
 Author: Eliezer Abate
-Last Edit: October 31 2017
+Last Edit: Februaryr 11 2019
 
-#### Brief Description
+### Brief Description
 
-The following is an implementation of common sorting, searching, string, and 
-graph algorithms in C++. The list of algorithms below are found in the 
-appendix section in Robert Segewick and Kevin Wayne's Introduction to 
-Algorithms (Third Edition) on page 954.
+The following is an implementation of classic algorithms in C++.
 
 Each class of algorithms is located within its own directory. For example within
 the sorting directory, one can find the directories, 'quick-sort', 'merge-sort',
@@ -18,11 +15,11 @@ or more client files that provide a basic test case for the algorithm.
 
 A ~~strikethrough~~ on a description indicates that it has already been implemented. 
 Similarly a description missing a strikethrough is on my TODO list and will be 
-implemented at a later date.
+implemented at a later date. 
 
-#### Implementations
+_---_
 
-##### Sorting
+### Sorting
 
 - ~~selection sort~~
 - ~~insertion sort~~
@@ -35,7 +32,7 @@ implemented at a later date.
 - 3-way partioning quick sort
 - in-place merge
 
-##### Graphs
+### Graphs
 
 - depth first search
 - breadth first search
@@ -50,7 +47,7 @@ implemented at a later date.
 - shortest paths (Bellman Ford)
 - articulation points/bridges
 
-##### Strings
+### Strings
 
 - LSD string sort
 - MSD string sort
@@ -64,4 +61,14 @@ implemented at a later date.
 - huffman expansion/compression
 - lzw compression/expansion
 
+### Dynamic Programming
 
+- rod cutting
+- matrix chain multiplication
+- longest common subsequence
+- optimal binary search tree
+- longest simple path in a DAG
+- longest palindrome subsequence
+- bitonic euclidean TSP
+- printing neatly
+- edit distance
